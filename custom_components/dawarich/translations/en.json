@@ -48,7 +48,8 @@
     "abort": {
       "already_configured": "This Dawarich instance is already configured.",
       "reconfigure_failed": "Failed to reconfigure the integration.",
-      "reconfigure_successful": "Dawarich configuration updated successfully."
+      "reconfigure_successful": "Dawarich configuration updated successfully.",
+      "reauth_successful": "Re-authentication successful. The API key has been updated."
     }
   },
   "entity": {

@@ -39,12 +39,22 @@ class DawarichStatsCoordinator(DataUpdateCoordinator):
                 )
                 raise ConfigEntryAuthFailed("Invalid API key")
             case _:
+                # Check if error message indicates an authentication issue
+                # Some servers return 500 but include 401/Unauthorized in the error
+                error_str = str(response.error).lower() if response.error else ""
+                if "401" in error_str or "unauthorized" in error_str:
+                    _LOGGER.error(
+                        "Invalid credentials when trying to fetch stats from Dawarich (status %s)",
+                        response.response_code,
+                    )
+                    raise ConfigEntryAuthFailed("Invalid API key")
+
                 _LOGGER.error(
                     "Error fetching data from Dawarich (status %s) %s",
                     response.response_code,
                     response.error,
                 )
-                raise UpdateFailed from Warning(
+                raise UpdateFailed(
                     f"Error fetching data from Dawarich (status {response.response_code})"
                 )
 

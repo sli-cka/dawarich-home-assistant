@@ -48,7 +48,8 @@
     "abort": {
       "already_configured": "Diese Dawarich Instanz ist bereits konfiguriert.",
       "reconfigure_failed": "Neukonfiguration der Integration fehlgeschlagen.",
-      "reconfigure_successful": "Dawarich Konfiguration erfolgreich aktualisiert."
+      "reconfigure_successful": "Dawarich Konfiguration erfolgreich aktualisiert.",
+      "reauth_successful": "Erneute Authentifizierung erfolgreich. Der API Schlüssel wurde aktualisiert."
     }
   },
   "entity": {

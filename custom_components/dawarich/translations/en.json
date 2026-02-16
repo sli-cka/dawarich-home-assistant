@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "Dawarich",
-        "description": "Please enter your Dawarich credentials",
+        "description": "Please enter your Dawarich connection details.",
         "data": {
           "host": "Host",
           "port": "Port",
@@ -14,16 +14,41 @@
         }
       },
       "api_key": {
-        "title": "Dawarich",
-        "description": "Please enter your Dawarich credentials",
+        "title": "Dawarich API Key",
+        "description": "Please enter your Dawarich API key.",
         "data": {
           "api_key": "API Key"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Re-authenticate Dawarich",
+        "description": "Your Dawarich API key for {host} is invalid. Please enter a new API key.",
+        "data": {
+          "api_key": "API Key"
+        }
+      },
+      "reconfigure_confirm": {
+        "title": "Reconfigure Dawarich",
+        "description": "Update your Dawarich connection settings. Leave API key empty to keep the current key.",
+        "data": {
+          "host": "Host",
+          "port": "Port",
+          "name": "Name",
+          "mobile_app": "Device Tracker",
+          "ssl": "Use SSL (i.e. https)",
+          "verify_ssl": "Verify SSL",
+          "api_key": "API Key (leave empty to keep current)"
         }
       }
     },
     "error": {
       "connection_error": "Connection error, could not reach the Dawarich API.",
       "invalid_api_key": "Invalid API key."
+    },
+    "abort": {
+      "already_configured": "This Dawarich instance is already configured.",
+      "reconfigure_failed": "Failed to reconfigure the integration.",
+      "reconfigure_successful": "Dawarich configuration updated successfully."
     }
   },
   "entity": {

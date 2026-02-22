@@ -59,7 +59,7 @@ In version 0.9.0, we changed how device and entity unique IDs are generated. Pre
 > [!TIP]
 > **Your history will be preserved!** When you re-add the integration with the same name, the new entity IDs will be generated based on the config entry ID. Since this creates the same entity IDs as before, Home Assistant will automatically reconnect your historical data to the new entities.
 
-This is a one-time migration. After upgrading to 0.9.0, you can use the new **Reconfigure** option (⋮ menu → Reconfigure) to update your settings—including your API key—without losing your entities or history.
+This is a one-time migration. After upgrading to 0.9.0, you can use the new **Reconfigure** option (⋮ menu → Reconfigure) to update your settings, including your API key, without losing your entities or history.
 
 ## Configuration
 Below are the configuration options for the Dawarich Home Assistant integration. After configuration, input your Dawarich API key when prompted, which is available on the Dawarich account page.

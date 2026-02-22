@@ -183,16 +183,21 @@ class DawarichConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         # Get current values from the entry
         current_data = self._reconfigure_entry.data
         # Parse host and port from the stored host:port format
-        host_port = current_data.get(CONF_HOST, "")
-        if ":" in host_port:
-            current_host, port_str = host_port.rsplit(":", 1)
+        host_and_port_string = current_data.get(CONF_HOST, "")
+        if ":" in host_and_port_string:
+            current_host, port_str = host_and_port_string.rsplit(":", 1)
             try:
                 current_port = int(port_str)
             except ValueError:
-                current_host = host_port
+                _LOGGER.warning(
+                    "Failed to parse port from stored host value '%s', using default port %s",
+                    host_and_port_string,
+                    DEFAULT_PORT,
+                )
+                current_host = host_and_port_string
                 current_port = DEFAULT_PORT
         else:
-            current_host = host_port
+            current_host = host_and_port_string
             current_port = DEFAULT_PORT
 
         if user_input is not None:
@@ -218,6 +223,15 @@ class DawarichConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     data=self._config,
                     title=self._config[CONF_NAME],
                 )
+        else:
+            # Set default values for the form
+            user_input = {
+                CONF_HOST: current_host,
+                CONF_PORT: current_port,
+                CONF_NAME: current_data.get(CONF_NAME, DEFAULT_NAME),
+                CONF_SSL: current_data.get(CONF_SSL, DEFAULT_SSL),
+                CONF_VERIFY_SSL: current_data.get(CONF_VERIFY_SSL, DEFAULT_VERIFY_SSL),
+            }
 
         return self.async_show_form(
             step_id="reconfigure_confirm",
@@ -225,15 +239,15 @@ class DawarichConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 {
                     vol.Required(
                         CONF_HOST,
-                        default=user_input.get(CONF_HOST) if user_input else current_host
+                        default=user_input.get(CONF_HOST),
                     ): str,
                     vol.Required(
                         CONF_PORT,
-                        default=user_input.get(CONF_PORT, current_port) if user_input else current_port
+                        default=user_input.get(CONF_PORT),
                     ): vol.Coerce(int),
                     vol.Required(
                         CONF_NAME,
-                        default=user_input.get(CONF_NAME) if user_input else current_data.get(CONF_NAME, DEFAULT_NAME)
+                        default=user_input.get(CONF_NAME),
                     ): str,
                     vol.Optional(
                         CONF_DEVICE,
@@ -243,11 +257,11 @@ class DawarichConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     ),
                     vol.Required(
                         CONF_SSL,
-                        default=user_input.get(CONF_SSL) if user_input else current_data.get(CONF_SSL, DEFAULT_SSL)
+                        default=user_input.get(CONF_SSL),
                     ): bool,
                     vol.Required(
                         CONF_VERIFY_SSL,
-                        default=user_input.get(CONF_VERIFY_SSL) if user_input else current_data.get(CONF_VERIFY_SSL, DEFAULT_VERIFY_SSL)
+                        default=user_input.get(CONF_VERIFY_SSL),
                     ): bool,
                     vol.Optional(
                         CONF_API_KEY,

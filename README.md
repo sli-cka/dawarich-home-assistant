@@ -5,10 +5,11 @@
   - [Install](#install)
     - [Install with HACS](#install-with-hacs)
     - [Manual Installation](#manual-installation)
+  - [Upgrading](#upgrading)
+    - [Upgrading to v0.9.0](#upgrading-to-v090)
   - [Configuration](#configuration)
   - [Known Issues](#known-issues)
     - [Entity or Device not found in registry](#entity-or-device-not-found-in-registry)
-    - [Repair or Re-Configure](#repair-or-re-configure)
 <!--toc:end-->
 ---
 > [!NOTE]
@@ -37,6 +38,29 @@ Altough the below instructions might look complicated, they are rather simple.
 ### Manual Installation
 Take the items under `custom_components/dawarich` and place them in the folder `homeassistant/custom_components/dawarich`.
 
+## Upgrading
+
+### Upgrading to v0.9.0
+
+> [!IMPORTANT]
+> Version 0.9.0 includes a **breaking change** that affects entity identifiers.
+
+In version 0.9.0, we changed how device and entity unique IDs are generated. Previously, they were based on the API key, which caused issues when reconfiguring credentials. Now they use the stable config entry ID.
+
+**If you are upgrading from a version earlier than 0.9.0**, you need to:
+
+1. **Delete** the existing Dawarich integration from Home Assistant
+   - Go to **Settings** → **Devices & Services** → **Dawarich**
+   - Click the three dots menu (⋮) and select **Delete**
+2. **Re-add** the integration
+   - Click **Add Integration** and search for "Dawarich"
+   - Enter your connection details and API key
+
+> [!TIP]
+> **Your history will be preserved!** When you re-add the integration with the same name, the new entity IDs will be generated based on the config entry ID. Since this creates the same entity IDs as before, Home Assistant will automatically reconnect your historical data to the new entities.
+
+This is a one-time migration. After upgrading to 0.9.0, you can use the new **Reconfigure** option (⋮ menu → Reconfigure) to update your settings—including your API key—without losing your entities or history.
+
 ## Configuration
 Below are the configuration options for the Dawarich Home Assistant integration. After configuration, input your Dawarich API key when prompted, which is available on the Dawarich account page.
 
@@ -56,9 +80,3 @@ is disabled. If you change the name of the tracker sensor of Dawarich you will
 get a warning. If you at the same time have disabled the entity then this will,
 until you restart your home assistant instance, continue to send new locations.
 
-### Repair or Re-Configure
-At the moment neither a repair or reconfigure flow exists. This is being tracked
-in [#73](https://github.com/AlbinLind/dawarich-home-assistant/issues/73) and
-[#74](https://github.com/AlbinLind/dawarich-home-assistant/issues/74) respectively.
-If you remove the device and reconfigure it with the same name you should be able
-to reconfigure and keep the historical statistics.

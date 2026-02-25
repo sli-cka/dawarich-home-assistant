@@ -7,7 +7,6 @@ from homeassistant.components.device_tracker.const import SourceType
 from homeassistant.components.sensor import SensorEntity, SensorEntityDescription
 from homeassistant.components.sensor.const import SensorDeviceClass, SensorStateClass
 from homeassistant.const import (
-    CONF_API_KEY,
     CONF_HOST,
     CONF_NAME,
     UnitOfLength,
@@ -90,12 +89,13 @@ async def async_setup_entry(
 ):
     """Set up Dawarich sensor."""
     url = entry.data[CONF_HOST]
-    api_key = entry.data[CONF_API_KEY]
     name = entry.data[CONF_NAME]
     coordinator = entry.runtime_data.coordinator
+    # Use entry_id for stable identifiers (doesn't change when API key changes)
+    entry_id = entry.entry_id
 
     device_info = DeviceInfo(
-        identifiers={(DOMAIN, api_key)},
+        identifiers={(DOMAIN, entry_id)},
         name=name,
         manufacturer="Dawarich",
         configuration_url=entry.runtime_data.api.url,
@@ -103,7 +103,7 @@ async def async_setup_entry(
 
     # Add statistics sensor
     sensors: list[DawarichSensors] = [
-        DawarichStatisticsSensor(url, api_key, name, desc, coordinator, device_info)
+        DawarichStatisticsSensor(url, entry_id, name, desc, coordinator, device_info)
         for desc in SENSOR_TYPES
     ]
 
@@ -112,7 +112,7 @@ async def async_setup_entry(
         DawarichVersionSensor(
             coordinator=entry.runtime_data.version_coordinator,
             description=VERSION_SENSOR_TYPES,
-            api_key=api_key,
+            entry_id=entry_id,
             device_info=device_info,
         )
     )
@@ -124,7 +124,7 @@ async def async_setup_entry(
         api = entry.runtime_data.api
         sensors.append(
             DawarichTrackerSensor(
-                api_key=api_key,
+                entry_id=entry_id,
                 device_name=name,
                 mobile_app=mobile_app,
                 api=api,
@@ -144,9 +144,9 @@ class DawarichTrackerSensor(SensorEntity):
 
     def __init__(
         self,
-        api_key: str,
+        entry_id: str,
         device_name: str,
-        mobile_app,
+        mobile_app: str,
         api: DawarichAPI,
         hass: HomeAssistant,
         device_info: DeviceInfo,
@@ -155,7 +155,7 @@ class DawarichTrackerSensor(SensorEntity):
         """Initialize the sensor."""
         self._device_name = device_name
         self._mobile_app = mobile_app
-        self._api_key = api_key
+        self._entry_id = entry_id
         self._hass = hass
         self._api = api
         self._attr_device_info = device_info
@@ -173,7 +173,7 @@ class DawarichTrackerSensor(SensorEntity):
     @property
     def unique_id(self) -> str:  # type: ignore[override]
         """Return a unique id for the sensor."""
-        return f"{self._api_key}/tracker"
+        return f"{self._entry_id}/tracker"
 
     @property
     def state(self) -> StateType:
@@ -271,7 +271,7 @@ class DawarichTrackerSensor(SensorEntity):
         if self.device_entry is None:
             _LOGGER.debug("No device entry found, instead looking based on identifiers")
             device = device_registry.async_get_device(
-                identifiers={(DOMAIN, self._api_key)}
+                identifiers={(DOMAIN, self._entry_id)}
             )
         else:
             _LOGGER.debug(
@@ -328,12 +328,12 @@ class DawarichTrackerSensor(SensorEntity):
 
 
 class DawarichStatisticsSensor(CoordinatorEntity, SensorEntity):  # type: ignore[incompatible-subclass]
-    """Representation fo a Dawarich sensor."""
+    """Representation of a Dawarich sensor."""
 
     def __init__(
         self,
         url: str,
-        api_key: str,
+        entry_id: str,
         device_name: str,
         description: SensorEntityDescription,
         coordinator: DawarichStatsCoordinator,
@@ -341,11 +341,11 @@ class DawarichStatisticsSensor(CoordinatorEntity, SensorEntity):  # type: ignore
     ):
         """Initialize Dawarich sensor."""
         super().__init__(coordinator)
-        self._api_key = api_key
+        self._entry_id = entry_id
         self._url = url
         self._device_name = device_name
         self.entity_description = description
-        self._attr_unique_id = api_key + "/" + description.key
+        self._attr_unique_id = f"{entry_id}/{description.key}"
         self._attr_device_info = device_info
         self._attr_state_class = SensorStateClass.TOTAL
 
@@ -381,13 +381,13 @@ class DawarichVersionSensor(
         self,
         coordinator: DawarichVersionCoordinator,
         description: SensorEntityDescription,
-        api_key: str,
+        entry_id: str,
         device_info: DeviceInfo,
     ):
         """Initialize Dawarich version sensor."""
         super().__init__(coordinator)
         self.entity_description = description
-        self._attr_unique_id = f"{api_key}/{description.key}"
+        self._attr_unique_id = f"{entry_id}/{description.key}"
         self._attr_device_info = device_info
 
     @property

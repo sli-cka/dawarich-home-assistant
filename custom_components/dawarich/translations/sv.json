@@ -49,7 +49,7 @@
     "abort": {
       "already_configured": "Denna Dawarich-instans är redan konfigurerad.",
       "reconfigure_failed": "Misslyckades med att omkonfigurera integrationen.",
-      "reconfigure_successful": "Dawarich-konfigurationen uppdaterades framgångsrikt.",
+      "reconfigure_successful": "Dawarich-konfigurationen uppdaterades.",
       "reauth_successful": "Återautentisering lyckades. API-nyckeln har uppdaterats."
     }
   },

@@ -17,7 +17,11 @@ from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.event import async_track_state_change_event
-from homeassistant.helpers.issue_registry import IssueSeverity, async_create_issue, async_delete_issue
+from homeassistant.helpers.issue_registry import (
+    IssueSeverity,
+    async_create_issue,
+    async_delete_issue,
+)
 from homeassistant.helpers.typing import StateType
 from homeassistant.helpers.update_coordinator import (
     CoordinatorEntity,
@@ -245,10 +249,10 @@ class DawarichTrackerSensor(SensorEntity):
         )
         new_state = event.data.get("new_state")
         old_state = event.data.get("old_state")
-        
+
         # Check entity availability and manage repair issue
         self._async_check_entity_availability(new_state)
-        
+
         if new_state is None:
             _LOGGER.error("No new state found for %s", self._mobile_app)
             return

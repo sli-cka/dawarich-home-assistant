@@ -85,5 +85,11 @@
         "name": "Versie"
       }
     }
+  },
+  "issues": {
+    "device_tracker_unavailable": {
+      "title": "Apparaat-tracker niet beschikbaar",
+      "description": "De apparaat-tracker `{device_tracker}` geconfigureerd voor {device_name} is niet beschikbaar. Dit kan komen doordat de entiteit is verwijderd of de integratie die deze aanbiedt niet is geladen. Controleer de entiteit of configureer de Dawarich-integratie opnieuw om een andere apparaat-tracker te gebruiken."
+    }
   }
 }

@@ -85,5 +85,11 @@
         "name": "Version"
       }
     }
+  },
+  "issues": {
+    "device_tracker_unavailable": {
+      "title": "Device tracker unavailable",
+      "description": "The device tracker `{device_tracker}` configured for {device_name} is not available. This may be because the entity has been removed or the integration providing it is not loaded. Please check the entity or reconfigure the Dawarich integration to use a different device tracker."
+    }
   }
 }

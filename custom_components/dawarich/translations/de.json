@@ -85,5 +85,11 @@
         "name": "Version"
       }
     }
+  },
+  "issues": {
+    "device_tracker_unavailable": {
+      "title": "Geräte-Tracker nicht verfügbar",
+      "description": "Der Geräte-Tracker `{device_tracker}`, der für {device_name} konfiguriert ist, ist nicht verfügbar. Dies kann daran liegen, dass die Entität entfernt wurde oder die Integration, die sie bereitstellt, nicht geladen ist. Bitte überprüfen Sie die Entität oder konfigurieren Sie die Dawarich-Integration neu, um einen anderen Geräte-Tracker zu verwenden."
+    }
   }
 }

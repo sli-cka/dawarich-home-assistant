@@ -209,14 +209,13 @@ class DawarichTrackerSensor(SensorEntity):
                     },
                 )
                 self._repair_issue_created = True
-        else:
-            if self._repair_issue_created:
-                _LOGGER.info(
-                    "Device tracker %s is available again, clearing repair issue.",
-                    self._mobile_app,
-                )
-                async_delete_issue(self._hass, DOMAIN, self._issue_id)
-                self._repair_issue_created = False
+        elif self._repair_issue_created:
+            _LOGGER.info(
+                "Device tracker %s is available again, clearing repair issue.",
+                self._mobile_app,
+            )
+            async_delete_issue(self._hass, DOMAIN, self._issue_id)
+            self._repair_issue_created = False
 
     async def async_will_remove_from_hass(self) -> None:
         """Clean up when entity is removed."""
@@ -248,7 +247,6 @@ class DawarichTrackerSensor(SensorEntity):
             "State change detected for %s, updating Dawarich", self._mobile_app
         )
         new_state = event.data.get("new_state")
-        old_state = event.data.get("old_state")
 
         # Check entity availability and manage repair issue
         self._async_check_entity_availability(new_state)
